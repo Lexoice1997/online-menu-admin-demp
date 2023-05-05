@@ -23,11 +23,11 @@ export const apiSlice = createApi({
 });
 
 const $host = axios.create({
-  baseURL: 'http://103.54.56.168',
+  baseURL: 'https://103.54.56.168',
 });
 
 const $authHost = axios.create({
-  baseURL: 'http://103.54.56.168',
+  baseURL: 'https://103.54.56.168',
 });
 
 $authHost.interceptors.request.use((config: any) => {
