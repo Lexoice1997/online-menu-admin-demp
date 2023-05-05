@@ -1,0 +1,10 @@
+.admin {
+  min-width: 380px;
+  margin: 20px;
+  margin-right: 80px;
+}
+
+.admin-navlink {
+  text-decoration: none;
+  color: inherit;
+}

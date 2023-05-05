@@ -1,0 +1,14 @@
+.statistics {
+  width: 90%;
+  margin-left: 4%;
+  margin-top: 2%;
+  background-color: white;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.stat {
+  padding: 20px;
+  border-radius: 7px;
+}

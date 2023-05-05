@@ -1,0 +1,58 @@
+.navbar {
+  padding: 10px;
+  color: #3a3939;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+}
+
+.logo {
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+}
+
+.logo h1 {
+  font-size: 24px;
+}
+
+.links {
+  border: 1px solid white;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.linksActive {
+  background-color: #eef2fa;
+  border: 1px solid #a3a3a3;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.links:hover {
+  background-color: #eef2fa;
+  border: 1px solid #a3a3a3;
+}
+
+.linksItems {
+  display: flex;
+  align-items: center;
+}
+
+.linksItems p {
+  margin-left: 10px;
+  font-size: 18px;
+}
