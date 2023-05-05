@@ -22,7 +22,7 @@ const initialState: ILoginState = {
 
 export const check = createAsyncThunk('auth/check', async (token: any, thunkAPI) => {
   try {
-    const response = await axios.get(`http://103.54.56.168/auth/check?token=${token}`);
+    const response = await axios.get(`https://103.54.56.168/auth/check?token=${token}`);
     return response.data;
   } catch (e) {
     return thunkAPI.rejectWithValue('Не удалось получить данные');
@@ -33,7 +33,7 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (creditionals: any, thunkAPI) => {
     try {
-      const response = await axios.put(`http://103.54.56.168/users/${creditionals.id}`, {
+      const response = await axios.put(`https://103.54.56.168/users/${creditionals.id}`, {
         ...creditionals,
       });
       return response.data;
