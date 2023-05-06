@@ -10,7 +10,7 @@ function AdminCategory() {
   };
 
   return (
-    <Button sx={{ backgroundColor: '#1890ff', color: 'white' }} size="large" onClick={handleOpen}>
+    <Button size="large" onClick={handleOpen} variant="contained">
       Добавить категорию
     </Button>
   );

@@ -101,7 +101,7 @@ function Navbar() {
             fontSize: '25px',
           }}
         >
-          Grand Lavash
+          Demo
         </Typography>
 
         <Menu

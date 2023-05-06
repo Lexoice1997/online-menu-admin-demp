@@ -22,7 +22,9 @@ const initialState: ILoginState = {
 
 export const check = createAsyncThunk('auth/check', async (token: any, thunkAPI) => {
   try {
-    const response = await axios.get(`https://103.54.56.168/auth/check?token=${token}`);
+    const response = await axios.get(
+      `https://103-54-56-168.cloud-xip.com/auth/check?token=${token}`
+    );
     return response.data;
   } catch (e) {
     return thunkAPI.rejectWithValue('Не удалось получить данные');
@@ -33,9 +35,12 @@ export const changePassword = createAsyncThunk(
   'auth/changePassword',
   async (creditionals: any, thunkAPI) => {
     try {
-      const response = await axios.put(`https://103.54.56.168/users/${creditionals.id}`, {
-        ...creditionals,
-      });
+      const response = await axios.put(
+        `https://103-54-56-168.cloud-xip.com/users/${creditionals.id}`,
+        {
+          ...creditionals,
+        }
+      );
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue('Не удалось изменить пароль');
