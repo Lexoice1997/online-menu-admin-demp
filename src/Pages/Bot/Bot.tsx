@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable no-nested-ternary */
-import { Alert, Pagination } from '@mui/material';
+import { Pagination } from '@mui/material';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import dayjs from 'dayjs';
@@ -10,7 +10,7 @@ import NotificationSound from '../../assets/notification.mp3';
 import { splitNum } from '../../helpers/utils/splitNum';
 import { useGetOrdersQuery } from '../../store/services/apiService';
 import styles from './Bot.module.css';
-import BotStatusContent from './BotStatusContent';
+import BotStatusContent from './components/BotStatusContent/BotStatusContent';
 
 interface BotProps {
   botStatus: string;
@@ -97,7 +97,7 @@ function Bot({ botStatus, botPage }: BotProps) {
       field: 'status',
       headerName: 'Статус',
       width: 100,
-      renderCell: (params: any) => (
+      renderCell: (_) => (
         <div>
           {botStatus === 'Expectation' ? (
             <span style={{ color: '#1890ff' }}>Ожидание</span>

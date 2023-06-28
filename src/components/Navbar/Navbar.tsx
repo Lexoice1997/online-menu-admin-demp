@@ -1,52 +1,34 @@
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import EqualizerIcon from '@mui/icons-material/Equalizer';
+import GroupsIcon from '@mui/icons-material/Groups';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
-import { Menu, MenuItem, Sidebar, SubMenu, useProSidebar } from 'react-pro-sidebar';
+import StoreMallDirectoryIcon from '@mui/icons-material/StoreMallDirectory';
+import { Menu, MenuItem, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { Link, useLocation } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
-import styles from './Navbar.module.css';
-
-// function Navbar() {
-//   const { pathname } = useLocation();
-//   return (
-//     <div className={styles.navbar}>
-//       <div className={styles.logo}>
-//         <h1>LOGO</h1>
-//       </div>
-
-//       <Link to="/">
-//         <div className={pathname === '/' ? styles.linksActive : styles.links}>
-//           <div className={styles.linksItems}>
-//             <RestaurantMenuIcon />
-//             <p className="text-sm font-semibold">Menu</p>
-//           </div>
-//         </div>
-//       </Link>
-
-//       <Link to="/bot">
-//         <div className={pathname === '/bot' ? styles.linksActive : styles.links}>
-//           <div className={styles.linksItems}>
-//             <SmartToyIcon />
-//             <p>Bot</p>
-//           </div>
-//         </div>
-//       </Link>
-
-//       <Link to="/statistic">
-//         <div className={pathname === '/statistic' ? styles.linksActive : styles.links}>
-//           <div className={styles.linksItems}>
-//             <EqualizerIcon />
-//             <p>Statistic</p>
-//           </div>
-//         </div>
-//       </Link>
-//     </div>
-//   );
-// }
-
-// export default Navbar;
+import {
+  BOT_REFUSAL,
+  BOT_SUCCESS,
+  BOT_WAITING,
+  EMPLOYEE_BE,
+  EMPLOYEE_LIST,
+  EMPLOYEE_POSITION,
+  FINANCE_ADVENT,
+  FINANCE_EXPENSE,
+  MAIN,
+  MENU,
+  PRODUCTS,
+  STATISTIC_ALL,
+  STATISTIC_BOT,
+  STATISTIC_FINANCE,
+  STATISTIC_STOCK,
+  STOCK_ADVENT,
+  STOCK_EXPENSE,
+  STOCK_HISTORY,
+} from '../../helpers/constants/routesConst';
 
 const themes = {
   light: {
@@ -132,37 +114,89 @@ function Navbar() {
           }}
         >
           <MenuItem
-            active={pathname === '/'}
-            component={<Link to="/" />}
+            active={pathname === MAIN}
+            component={<Link to={MAIN} />}
             icon={<DashboardIcon sx={{ fontSize: '19px' }} />}
           >
             Главная
           </MenuItem>
           <MenuItem
-            active={pathname === '/menu'}
-            component={<Link to="/menu" />}
+            active={pathname === MENU}
+            component={<Link to={MENU} />}
             icon={<RestaurantMenuIcon sx={{ fontSize: '19px' }} />}
           >
             Меню
           </MenuItem>
           <SubMenu label="Бот" icon={<SmartToyIcon sx={{ fontSize: '19px' }} />}>
-            <MenuItem active={pathname === '/waiting'} component={<Link to="/waiting" />}>
+            <MenuItem active={pathname === BOT_WAITING} component={<Link to={BOT_WAITING} />}>
               Ожидание
             </MenuItem>
-            <MenuItem active={pathname === '/success'} component={<Link to="/success" />}>
+            <MenuItem active={pathname === BOT_SUCCESS} component={<Link to={BOT_SUCCESS} />}>
               Принято
             </MenuItem>
-            <MenuItem active={pathname === '/refusal'} component={<Link to="/refusal" />}>
+            <MenuItem active={pathname === BOT_REFUSAL} component={<Link to={BOT_REFUSAL} />}>
               Отказ
             </MenuItem>
           </SubMenu>
-          <MenuItem
-            active={pathname === '/statistic'}
-            component={<Link to="/statistic" />}
-            icon={<EqualizerIcon sx={{ fontSize: '19px' }} />}
-          >
-            Статистика
-          </MenuItem>
+          <SubMenu label="Склад" icon={<StoreMallDirectoryIcon sx={{ fontSize: '19px' }} />}>
+            <MenuItem active={pathname === PRODUCTS} component={<Link to={PRODUCTS} />}>
+              Продукты
+            </MenuItem>
+            <MenuItem active={pathname === STOCK_ADVENT} component={<Link to={STOCK_ADVENT} />}>
+              Приход
+            </MenuItem>
+            <MenuItem active={pathname === STOCK_EXPENSE} component={<Link to={STOCK_EXPENSE} />}>
+              Расход
+            </MenuItem>
+            <MenuItem active={pathname === STOCK_HISTORY} component={<Link to={STOCK_HISTORY} />}>
+              Остаток
+            </MenuItem>
+          </SubMenu>
+          <SubMenu label="Финанс" icon={<MonetizationOnIcon sx={{ fontSize: '19px' }} />}>
+            <MenuItem active={pathname === FINANCE_ADVENT} component={<Link to={FINANCE_ADVENT} />}>
+              Приход
+            </MenuItem>
+            <MenuItem
+              active={pathname === FINANCE_EXPENSE}
+              component={<Link to={FINANCE_EXPENSE} />}
+            >
+              Расход
+            </MenuItem>
+          </SubMenu>
+          <SubMenu label="Сотрудники" icon={<GroupsIcon sx={{ fontSize: '19px' }} />}>
+            <MenuItem active={pathname === EMPLOYEE_LIST} component={<Link to={EMPLOYEE_LIST} />}>
+              Список
+            </MenuItem>
+            <MenuItem active={pathname === EMPLOYEE_BE} component={<Link to={EMPLOYEE_BE} />}>
+              Отметка
+            </MenuItem>
+            <MenuItem
+              active={pathname === EMPLOYEE_POSITION}
+              component={<Link to={EMPLOYEE_POSITION} />}
+            >
+              Должности
+            </MenuItem>
+          </SubMenu>
+          <SubMenu label="Статистика" icon={<EqualizerIcon sx={{ fontSize: '19px' }} />}>
+            <MenuItem active={pathname === STATISTIC_ALL} component={<Link to={STATISTIC_ALL} />}>
+              Все
+            </MenuItem>
+            <MenuItem active={pathname === STATISTIC_BOT} component={<Link to={STATISTIC_BOT} />}>
+              Бот
+            </MenuItem>
+            <MenuItem
+              active={pathname === STATISTIC_STOCK}
+              component={<Link to={STATISTIC_STOCK} />}
+            >
+              Склад
+            </MenuItem>
+            <MenuItem
+              active={pathname === STATISTIC_FINANCE}
+              component={<Link to={STATISTIC_FINANCE} />}
+            >
+              Финанс
+            </MenuItem>
+          </SubMenu>
         </Menu>
       </Sidebar>
     </div>

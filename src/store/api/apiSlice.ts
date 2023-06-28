@@ -5,7 +5,7 @@ import { RootState } from '../store';
 
 // process.env.REACT_APP_API_URL
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'https://103-54-56-168.cloud-xip.com',
+  baseUrl: 'https://kvartirabar.uz',
   // credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const { token } = (getState() as RootState).auth;
@@ -23,11 +23,11 @@ export const apiSlice = createApi({
 });
 
 const $host = axios.create({
-  baseURL: 'https://103-54-56-168.cloud-xip.com',
+  baseURL: 'https://kvartirabar.uz',
 });
 
 const $authHost = axios.create({
-  baseURL: 'https://103-54-56-168.cloud-xip.com',
+  baseURL: 'https://kvartirabar.uz',
 });
 
 $authHost.interceptors.request.use((config: any) => {
@@ -35,4 +35,4 @@ $authHost.interceptors.request.use((config: any) => {
   return config;
 });
 
-export { $host, $authHost };
+export { $authHost, $host };

@@ -28,7 +28,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+function SignIn() {
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -99,3 +99,5 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+export default SignIn;

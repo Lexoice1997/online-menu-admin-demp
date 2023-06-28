@@ -4,7 +4,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import 'swiper/css';
 
-import RoutesComponent from './Routes/Routes';
+import RoutesComponent from './routes/AppRoutes';
 
 function App() {
   return <RoutesComponent />;
