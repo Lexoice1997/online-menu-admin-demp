@@ -9,27 +9,23 @@ import {
   TextField,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
-// import Select from 'react-select';
+import { ChangeEvent, useEffect, useState } from 'react';
+import Heading from '../../components/Heading/Heading';
 import useDebounce from '../../helpers/hooks/useDebounce';
+import { ITableProps } from '../../types/Table';
 import AddCategory from './components/AddCategory/AddCategory';
 import AddProduct from './components/AddProduct/AddProduct';
 import { getProducts } from './productsApi/productsApi';
-import {
-  useGetCategories,
-  useGetProducts,
-  useGetProductsById,
-} from './productsHooks/productsHooks';
+import { useGetCategories, useGetProducts } from './productsHooks/productsHooks';
 import { IProducts } from './productsTypes/productTypes';
 
 function Products() {
   const [products, setProducts] = useState<IProducts[] | undefined>(undefined);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [searchValue, setSearchValue] = useState<string>('');
   const [selectValue, setSelectValue] = useState<string>('');
   const debouncedValue = useDebounce<string>(searchValue, 500);
-  const { isLoading, data } = useGetProducts({ limit: 10, offset: page });
-  const { data: dataById } = useGetProductsById(selectValue);
+  const { isLoading, data } = useGetProducts({ limit: 10, offset: page, categoryId: selectValue });
   const { data: categories } = useGetCategories();
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -46,16 +42,12 @@ function Products() {
 
   const fetchSearchClients = async () => {
     const res = await getProducts({ limit: 10, offset: page, search: searchValue });
-    setProducts(res.data);
+    setProducts(res.data.Maxsulotlar);
   };
 
   useEffect(() => {
-    setProducts(data);
+    setProducts(data?.Maxsulotlar);
   }, [data]);
-
-  useEffect(() => {
-    setProducts(dataById?.products);
-  }, [dataById?.products]);
 
   useEffect(() => {
     fetchSearchClients();
@@ -70,10 +62,13 @@ function Products() {
       editable: false,
     },
     {
-      field: 'category_name',
+      field: 'category',
       headerName: 'Категория',
       width: 250,
       editable: false,
+      renderCell: (params: ITableProps<IProducts>) => (
+        <Box sx={{ py: 1 }}>{params.row.category.name}</Box>
+      ),
     },
     {
       field: 'quantity_type',
@@ -87,18 +82,19 @@ function Products() {
       headerName: 'Деиствии',
       width: 300,
       editable: false,
-      renderCell: (params: any) => <Box sx={{ py: 1 }}>фыв</Box>,
+      renderCell: (params: ITableProps<IProducts>) => <Box sx={{ py: 1 }}>фыв</Box>,
     },
   ];
 
   return (
     <Box sx={{ p: 2, m: 2, bgcolor: 'white', minHeight: '100vh' }}>
-      <Box sx={{ mb: 2 }}>
+      <Heading title="Продукты склада" />
+      <Box sx={{ marginTop: '20px' }}>
         <AddCategory />
         <AddProduct />
       </Box>
       <Box
-        sx={{ display: 'flex', width: '600px', alignItems: 'center' }}
+        sx={{ display: 'flex', width: '600px', alignItems: 'center', marginTop: '20px' }}
         justifyContent="space-between"
         alignItems="center"
       >
@@ -136,7 +132,7 @@ function Products() {
       <Box sx={{ height: 'calc(100vh - 220px)', width: '100%', marginTop: '20px' }}>
         <DataGrid
           rows={products?.length ? products : []}
-          // rowCount={orders?.count}
+          rowCount={data?.count}
           getRowHeight={() => 'auto'}
           columns={columns}
           checkboxSelection
@@ -147,7 +143,7 @@ function Products() {
         />
         <Box display="grid" justifyContent="end" p="2">
           <Pagination
-            // count={orders?.count ? Math.ceil(orders.count / 10) : 1}
+            count={data?.count ? Math.ceil(data?.count / 10) : 1}
             page={page}
             onChange={handleChangePage}
             sx={{ p: 2 }}

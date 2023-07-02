@@ -18,3 +18,7 @@ body {
 
 .swiper-wrapper {
 }
+
+.css-1pysi21-MuiFormLabel-root-MuiInputLabel-root {
+  z-index: 0 !important;
+}

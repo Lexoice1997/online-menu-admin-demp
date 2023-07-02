@@ -1,30 +1,35 @@
-import { Box, Pagination, TextField } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Heading from '../../components/Heading/Heading';
 import useDebounce from '../../helpers/hooks/useDebounce';
 import { ITableProps } from '../../types/Table';
-import PutProduct from './components/PutProduct/PutProduct';
-import { getProductsHistory } from './stockExpenseApi/stockExpenseApi';
-import { useGetProductsHistory } from './stockExpenseHooks/stockExpenseHooks';
-import { IProducts } from './stockExpenseTypes/stockExpenseTypes';
+import { getProducts } from './stockRemaindApi/stockRemaindApi';
+import {
+  useGetCategories,
+  useGetProducts,
+  useGetProductsById,
+} from './stockRemaindHooks/stockRemaindHooks';
+import { IProducts } from './stockRemaindTypes/stockRemaindApi';
 
-function StockExpense() {
+function StockRemaind() {
   const [products, setProducts] = useState<IProducts[] | undefined>(undefined);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [startDate, setStartDate] = useState<string | undefined>(undefined);
-  const [endDate, setEndDate] = useState<string | undefined>(undefined);
+  const [selectValue, setSelectValue] = useState<string>('');
   const debouncedValue = useDebounce<string>(searchValue, 500);
-  const { isLoading, data } = useGetProductsHistory({
-    limit: 10,
-    offset: page,
-    startDate,
-    endDate,
-  });
+  const { isLoading, data } = useGetProducts({ limit: 10, offset: page });
+  const { data: dataById } = useGetProductsById(selectValue);
+  const { data: categories } = useGetCategories();
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -34,14 +39,22 @@ function StockExpense() {
     setSearchValue(event.target.value);
   };
 
+  const handleChangeSelectValue = (event: SelectChangeEvent<string>) => {
+    setSelectValue(event.target.value);
+  };
+
   const fetchSearchClients = async () => {
-    const res = await getProductsHistory({ limit: 10, offset: page, search: searchValue });
-    setProducts(res.data?.statistics);
+    const res = await getProducts({ limit: 10, offset: page, search: searchValue });
+    setProducts(res.data.Maxsulotlar);
   };
 
   useEffect(() => {
-    setProducts(data?.statistics);
+    setProducts(data?.Maxsulotlar);
   }, [data]);
+
+  useEffect(() => {
+    setProducts(dataById?.products);
+  }, [dataById?.products]);
 
   useEffect(() => {
     fetchSearchClients();
@@ -54,53 +67,46 @@ function StockExpense() {
       headerName: 'Название',
       width: 200,
       editable: false,
-      renderCell: (params: ITableProps<IProducts>) => (
-        <Box sx={{ py: 1 }}>{params.row.product.Maxsulot.name}</Box>
-      ),
     },
     {
-      field: 'price',
-      headerName: 'Цена',
+      field: 'category_name',
+      headerName: 'Категория',
       width: 200,
       editable: false,
-      renderCell: (params: ITableProps<IProducts>) => (
-        <Box sx={{ py: 1 }}>{params.row.product.price}</Box>
-      ),
-    },
-    {
-      field: 'date',
-      headerName: 'Дата',
-      width: 200,
-      editable: false,
-    },
-    {
-      field: 'quantity',
-      headerName: 'Количество',
-      width: 200,
-      editable: false,
-    },
-    {
-      field: 'summ',
-      headerName: 'Сумма',
-      width: 100,
-      editable: false,
+      renderCell: (params: ITableProps<IProducts>) => <Box>{params.row?.category?.name}</Box>,
     },
     {
       field: 'quantity_type',
       headerName: 'Ед. изм.',
       width: 100,
+      editable: false,
+    },
+    {
+      field: 'products',
+      headerName: 'Продукты',
+      width: 400,
+      editable: false,
       renderCell: (params: ITableProps<IProducts>) => (
-        <Box sx={{ py: 1 }}>{params.row.product.Maxsulot.quantity_type}</Box>
+        <Box sx={{ py: 1 }}>
+          {params.row.products.map((item) => {
+            return (
+              <Box key={item.id} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ marginRight: '10px' }}>{item.date}</Box>
+                <Box sx={{ marginRight: '10px', fontWeight: 700 }}>{item.price}</Box>
+                <Box sx={{ color: 'red' }}>{item.quantity}</Box>
+              </Box>
+            );
+          })}
+        </Box>
       ),
     },
   ];
 
   return (
     <Box sx={{ p: 2, m: 2, bgcolor: 'white', minHeight: '100vh' }}>
-      <Heading title="Расход склада" />
-      <PutProduct />
+      <Heading title="Остатки склада" />
       <Box
-        sx={{ display: 'flex', width: '1000px', alignItems: 'center', marginTop: '20px' }}
+        sx={{ display: 'flex', width: '600px', alignItems: 'center', marginTop: '20px' }}
         justifyContent="space-between"
         alignItems="center"
       >
@@ -111,11 +117,12 @@ function StockExpense() {
           id="name"
           label="Название"
           autoFocus
+          fullWidth
           onChange={handleChangeSearchValue}
           value={searchValue}
-          sx={{ marginTop: '8px', width: '370px' }}
+          sx={{ marginTop: '8px' }}
         />
-        {/* <FormControl sx={{ width: '370px', marginLeft: '10px' }} size="small">
+        <FormControl sx={{ width: '370px', marginLeft: '10px' }} size="small">
           <InputLabel id="select-category-label">Категории</InputLabel>
           <Select
             labelId="select-category-label"
@@ -132,25 +139,7 @@ function StockExpense() {
               );
             })}
           </Select>
-        </FormControl> */}
-        <Box sx={{ display: 'flex' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              value={startDate}
-              onChange={(newValue) => setStartDate(dayjs(newValue).format('YYYY-MM-DD'))}
-              slotProps={{ textField: { size: 'small', fullWidth: true } }}
-              sx={{ marginLeft: '10px' }}
-            />
-          </LocalizationProvider>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              value={endDate}
-              onChange={(newValue) => setEndDate(dayjs(newValue).format('YYYY-MM-DD'))}
-              slotProps={{ textField: { size: 'small', fullWidth: true } }}
-              sx={{ marginLeft: '10px' }}
-            />
-          </LocalizationProvider>
-        </Box>
+        </FormControl>
       </Box>
       <Box sx={{ height: 'calc(100vh - 220px)', width: '100%', marginTop: '20px' }}>
         <DataGrid
@@ -177,4 +166,4 @@ function StockExpense() {
   );
 }
 
-export default StockExpense;
+export default StockRemaind;

@@ -1,12 +1,12 @@
 .wrapper {
   display: grid;
   grid-template-areas:
-    'navbar header header'
     'navbar main main'
-    'navbar footer footer';
+    'navbar main main'
+    'navbar main main';
   grid-template-columns: 250px 1fr;
   grid-template-rows: 1fr;
-  max-height: calc(100vh + 100px);
+  /* min-height: calc(100vh + 100px); */
 }
 .header {
   grid-area: header;
@@ -27,7 +27,7 @@
 
 .main {
   grid-area: main;
-  height: 100vh;
+  /* height: 100vh; */
   overflow: auto;
   background-color: #e5e7eb;
 }

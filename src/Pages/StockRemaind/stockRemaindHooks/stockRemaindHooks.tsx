@@ -1,30 +1,27 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import {
-  createCategory,
-  createProduct,
   getCategories,
   getProducts,
   getProductsByCategoryId,
-} from '../productsApi/productsApi';
+} from '../stockRemaindApi/stockRemaindApi';
 import {
   ICategory,
-  ICreateCategory,
-  ICreateProduct,
   IGetProductParams,
+  IProducts,
   IProductsById,
   IProductsData,
-} from '../productsTypes/productTypes';
+} from '../stockRemaindTypes/stockRemaindApi';
 
-export function useGetProducts({ search, offset, limit, categoryId }: IGetProductParams) {
+export function useGetProducts({ search, offset, limit }: IGetProductParams) {
   const getProductsFn = async () => {
-    const res = await getProducts({ search, offset, limit, categoryId });
+    const res = await getProducts({ search, offset, limit });
     const products: IProductsData = res.data;
     return products;
   };
 
   const { isError, isLoading, data, error } = useQuery<IProductsData, AxiosError>(
-    ['products', { offset, limit, categoryId }],
+    ['products', { offset, limit }],
     getProductsFn,
     { refetchOnWindowFocus: false }
   );
@@ -84,43 +81,5 @@ export function useGetProductsById(id: string) {
     isLoading,
     isError,
     error,
-  };
-}
-
-export function usePostCategory() {
-  const queryClient = useQueryClient();
-
-  const createCategoryFn = useMutation({
-    mutationFn: async (data: ICreateCategory) => {
-      return createCategory(data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['category']);
-      queryClient.refetchQueries(['category', { force: true }]);
-    },
-    onError: () => {},
-  });
-
-  return {
-    createCategoryFn,
-  };
-}
-
-export function usePostProduct() {
-  const queryClient = useQueryClient();
-
-  const createProductFn = useMutation({
-    mutationFn: async (data: ICreateProduct) => {
-      return createProduct(data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['products']);
-      queryClient.refetchQueries(['products', { force: true }]);
-    },
-    onError: () => {},
-  });
-
-  return {
-    createProductFn,
   };
 }

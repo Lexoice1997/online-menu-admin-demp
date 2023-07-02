@@ -1,16 +1,6 @@
-export interface ICreateCategory {
-  name: string;
-}
-
 export interface ICategory {
   id: string;
   name: string;
-}
-
-export interface ICreateProduct {
-  name: string;
-  category_id: string;
-  quantity_type: string;
 }
 
 export interface IProductsData {
@@ -42,7 +32,6 @@ export interface IProductsById {
 }
 
 export interface IGetProductParams {
-  categoryId?: string;
   search?: string;
   limit?: number;
   offset?: number;

@@ -5,12 +5,16 @@ export function getCategories() {
   return $authHost.get('/category');
 }
 
-export function getProducts({ search, limit, offset }: IGetProductParams) {
+export function getProducts({ search, limit, offset, categoryId }: IGetProductParams) {
   if (search) {
-    return $authHost.get(`/product/products?limit=${limit}&offset=${offset}&search=${search}`);
+    return $authHost.get(
+      `/product/products?limit=${limit}&offset=${offset}&search=${search}&category_id=${categoryId}`
+    );
   }
 
-  return $authHost.get(`/product/products?limit=${limit}&offset=${offset}`);
+  return $authHost.get(
+    `/product/products?limit=${limit}&offset=${offset}&category_id=${categoryId}`
+  );
 }
 
 export function getProductsByCategoryId(id: string) {

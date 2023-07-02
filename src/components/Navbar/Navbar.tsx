@@ -71,7 +71,7 @@ function Navbar() {
   const { pathname } = useLocation();
 
   return (
-    <div style={{ display: 'flex', height: '100%' }}>
+    <div style={{ display: 'flex', height: '100vh', paddingBottom: '40px' }}>
       <Sidebar>
         <Typography
           sx={{

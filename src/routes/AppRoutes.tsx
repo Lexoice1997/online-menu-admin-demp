@@ -38,7 +38,7 @@ import StatisticsFinance from '../pages/StatisticsFinance/StatisticsFinance';
 import StatisticsStock from '../pages/StatisticsStock/StatisticsStock';
 import StockAdvent from '../pages/StockAdvent/StockAdvent';
 import StockExpense from '../pages/StockExpense/StockExpense';
-import StockHistory from '../pages/StockHistory/StockHistory';
+import StockRemaind from '../pages/StockRemaind/StockRemaind';
 import Unauthorized from '../pages/Unathorized/Unauthorized';
 
 function AppRoutes() {
@@ -55,7 +55,7 @@ function AppRoutes() {
           <Route path={BOT_REFUSAL} element={<Bot botStatus="Refusal" botPage={1} />} />
           <Route path={STOCK_ADVENT} element={<StockAdvent />} />
           <Route path={STOCK_EXPENSE} element={<StockExpense />} />
-          <Route path={STOCK_HISTORY} element={<StockHistory />} />
+          <Route path={STOCK_HISTORY} element={<StockRemaind />} />
           <Route path={FINANCE_ADVENT} element={<FinanceAdvent />} />
           <Route path={FINANCE_EXPENSE} element={<FinanceExpense />} />
           <Route path={STATISTIC_BOT} element={<BotStatistics />} />

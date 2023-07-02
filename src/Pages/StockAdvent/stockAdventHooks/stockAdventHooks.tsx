@@ -1,30 +1,36 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { IProductsById } from '../../StockRemaind/stockRemaindTypes/stockRemaindApi';
 import {
-  createCategory,
-  createProduct,
   getCategories,
-  getProducts,
   getProductsByCategoryId,
-} from '../productsApi/productsApi';
+  getProductsHistory,
+  postProduct,
+} from '../stockAdventApi/stockAdventApi';
 import {
+  CategoriesResult,
   ICategory,
-  ICreateCategory,
-  ICreateProduct,
   IGetProductParams,
-  IProductsById,
+  IPostProduct,
+  IProducts,
   IProductsData,
-} from '../productsTypes/productTypes';
+} from '../stockAdventTypes/stockAdventTypes';
 
-export function useGetProducts({ search, offset, limit, categoryId }: IGetProductParams) {
+export function useGetProductsHistory({
+  search,
+  offset,
+  limit,
+  startDate,
+  endDate,
+}: IGetProductParams) {
   const getProductsFn = async () => {
-    const res = await getProducts({ search, offset, limit, categoryId });
+    const res = await getProductsHistory({ search, offset, limit, startDate, endDate });
     const products: IProductsData = res.data;
     return products;
   };
 
   const { isError, isLoading, data, error } = useQuery<IProductsData, AxiosError>(
-    ['products', { offset, limit, categoryId }],
+    ['products', { offset, limit, startDate, endDate }],
     getProductsFn,
     { refetchOnWindowFocus: false }
   );
@@ -37,11 +43,6 @@ export function useGetProducts({ search, offset, limit, categoryId }: IGetProduc
   };
 }
 
-interface CategoiresResult {
-  label: string;
-  value: string;
-}
-
 export function useGetCategories() {
   const getCategoriesFn = async () => {
     const res = await getCategories();
@@ -52,7 +53,7 @@ export function useGetCategories() {
     return result;
   };
 
-  const { isError, isLoading, data, error } = useQuery<CategoiresResult[], AxiosError>(
+  const { isError, isLoading, data, error } = useQuery<CategoriesResult[], AxiosError>(
     ['category'],
     getCategoriesFn,
     { refetchOnWindowFocus: false }
@@ -70,10 +71,13 @@ export function useGetProductsById(id: string) {
   const getProductsByIdFn = async () => {
     const res = await getProductsByCategoryId(id);
     const products: IProductsById = res.data;
-    return products;
+    const result = products?.products?.map((item) => {
+      return { value: item.id, label: item.name };
+    });
+    return result;
   };
 
-  const { isError, isLoading, data, error } = useQuery<IProductsById, AxiosError>(
+  const { isError, isLoading, data, error } = useQuery<CategoriesResult[], AxiosError>(
     ['products', { id }],
     getProductsByIdFn,
     { refetchOnWindowFocus: false }
@@ -87,31 +91,12 @@ export function useGetProductsById(id: string) {
   };
 }
 
-export function usePostCategory() {
-  const queryClient = useQueryClient();
-
-  const createCategoryFn = useMutation({
-    mutationFn: async (data: ICreateCategory) => {
-      return createCategory(data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['category']);
-      queryClient.refetchQueries(['category', { force: true }]);
-    },
-    onError: () => {},
-  });
-
-  return {
-    createCategoryFn,
-  };
-}
-
 export function usePostProduct() {
   const queryClient = useQueryClient();
 
-  const createProductFn = useMutation({
-    mutationFn: async (data: ICreateProduct) => {
-      return createProduct(data);
+  const postProductFn = useMutation({
+    mutationFn: async (data: IPostProduct) => {
+      return postProduct(data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['products']);
@@ -121,6 +106,6 @@ export function usePostProduct() {
   });
 
   return {
-    createProductFn,
+    postProductFn,
   };
 }
