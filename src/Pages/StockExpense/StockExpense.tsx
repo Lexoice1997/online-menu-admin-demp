@@ -16,8 +16,8 @@ function StockExpense() {
   const [products, setProducts] = useState<IProducts[] | undefined>(undefined);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [startDate, setStartDate] = useState<string | undefined>(undefined);
-  const [endDate, setEndDate] = useState<string | undefined>(undefined);
+  const [startDate, setStartDate] = useState<string | undefined>('');
+  const [endDate, setEndDate] = useState<string | undefined>('');
   const debouncedValue = useDebounce<string>(searchValue, 500);
   const { isLoading, data } = useGetProductsHistory({
     limit: 10,

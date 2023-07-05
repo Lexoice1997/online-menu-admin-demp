@@ -9,32 +9,20 @@ export function getProductsHistory({
   search,
   limit,
   offset,
-  startDate = null,
-  endDate = null,
+  startDate,
+  endDate,
 }: IGetProductParams) {
-  if (search) {
-    return $authHost.get(
-      `/stats?type="kirim"&limit=${limit}&offset=${offset}&search=${search}&startDate=${startDate}&endDate=${endDate}`
-    );
-  }
-
-  if (startDate && endDate) {
-    return $authHost.get(
-      `/stats?type="kirim"&limit=${limit}&offset=${offset}&search=${search}&startDate=${startDate}&endDate=${endDate}`
-    );
-  }
-
-  if (startDate) {
-    return $authHost.get(
-      `/stats?type="kirim"&limit=${limit}&offset=${offset}&search=${search}&startDate=${startDate}`
-    );
-  }
-
-  if (endDate) {
-    return $authHost.get(
-      `/stats?type="kirim"&limit=${limit}&offset=${offset}&search=${search}&endDate=${endDate}`
-    );
-  }
+  // if (search) {
+  //   return $authHost.get(
+  //     `/stats?type="kirim"&limit=${limit}&offset=${offset}&search=${search}&startDate=${startDate}&endDate=${endDate}`
+  //   );
+  // }
+  // if (startDate) {
+  //   return $authHost.get(`/stats?limit=${limit}&offset=${offset}&startDate=${startDate}`);
+  // }
+  // if (endDate) {
+  //   return $authHost.get(`/stats?limit=${limit}&offset=${offset}&endDate=${endDate}`);
+  // }
 
   return $authHost.get(`/stats?limit=${limit}&offset=${offset}`);
 }

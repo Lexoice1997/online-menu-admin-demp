@@ -1,18 +1,17 @@
-import { Box, Pagination } from '@mui/material';
+import { Box, Button, Pagination } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import Heading from '../../components/Heading/Heading';
-import { ITableProps } from '../../types/Table';
 import AddAdvent from './components/AddAdvent/AddAdvent';
 import { useGetFinanceAdvent } from './financeAdventHooks/financeAdventHooks';
 
 function FinanceAdvent() {
-  const [page, setPage] = useState(1);
-  const [startDate, setStartDate] = useState<string | undefined | null>(null);
-  const [endDate, setEndDate] = useState<string | undefined | null>(null);
+  const [page, setPage] = useState(0);
+  const [startDate, setStartDate] = useState<string | undefined | null>('');
+  const [endDate, setEndDate] = useState<string | undefined | null>('');
   const { isLoading, data } = useGetFinanceAdvent({
     limit: 10,
     offset: page,
@@ -22,6 +21,12 @@ function FinanceAdvent() {
 
   const handleChangePage = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+  };
+
+  const handleResetFilter = () => {
+    setStartDate('');
+    setEndDate('');
+    console.log('asd');
   };
 
   const columns: GridColDef[] = [
@@ -51,11 +56,12 @@ function FinanceAdvent() {
       editable: false,
     },
   ];
+
   return (
     <Box sx={{ p: 2, m: 2, bgcolor: 'white', minHeight: '100vh' }}>
       <Heading title="Приход финанса" />
       <AddAdvent />
-      <Box sx={{ display: 'flex', marginTop: '20px', width: '600px' }}>
+      <Box sx={{ display: 'flex', marginTop: '20px', width: '700px', alignItems: 'center' }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             value={startDate}
@@ -71,10 +77,17 @@ function FinanceAdvent() {
             sx={{ marginLeft: '10px' }}
           />
         </LocalizationProvider>
+        <Button
+          variant="contained"
+          sx={{ marginLeft: '20px', width: '50%' }}
+          onClick={handleResetFilter}
+        >
+          Сброс фильтр
+        </Button>
       </Box>
       <Box sx={{ height: 'calc(100vh - 220px)', width: '100%', marginTop: '20px' }}>
         <DataGrid
-          rows={data?.advent.length ? data.advent : []}
+          rows={data?.Finance_income.length ? data.Finance_income : []}
           rowCount={data?.count}
           getRowHeight={() => 'auto'}
           columns={columns}

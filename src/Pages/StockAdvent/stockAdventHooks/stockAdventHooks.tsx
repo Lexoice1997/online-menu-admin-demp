@@ -12,7 +12,6 @@ import {
   ICategory,
   IGetProductParams,
   IPostProduct,
-  IProducts,
   IProductsData,
 } from '../stockAdventTypes/stockAdventTypes';
 

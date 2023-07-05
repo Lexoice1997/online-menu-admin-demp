@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumericFormatCustom from '../../../../components/NumericFormatCustom/NumericFormatCustom';
-import { useAddFinanceAdvent } from '../../financeAdventHooks/financeAdventHooks';
+import { useAddFinanceExpense } from '../../financeExpenseHooks/financeExpenseHooks';
 
 const style = {
   position: 'absolute' as const,
@@ -20,50 +20,35 @@ const style = {
 };
 
 interface IFormInput {
-  bot: number;
-  take: number;
-  kassa: number;
-  dostavka: number;
+  sum: string;
+  description: string;
+  comment: string;
   date: string | Dayjs;
 }
 
-function AddAdvent() {
+function AddExpense() {
   const [modal, setModal] = useState<boolean>(false);
   const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()));
-  const { addFinanceAdventFn } = useAddFinanceAdvent();
+  const { addFinanceExpenseFn } = useAddFinanceExpense();
   const handleClose = () => setModal(false);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      bot: 0,
-      take: 0,
-      kassa: 0,
-      dostavka: 0,
+      sum: '',
+      description: '',
+      comment: '',
       date: dayjs(new Date()),
     },
   });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    addFinanceAdventFn.mutate({
-      type: 'bot',
+    addFinanceExpenseFn.mutate({
       date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.bot,
+      sum: data.sum,
+      description: data.description,
+      comment: data.comment,
     });
-    addFinanceAdventFn.mutate({
-      type: 'dostavka',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.dostavka,
-    });
-    addFinanceAdventFn.mutate({
-      type: 'kassa',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.kassa,
-    });
-    addFinanceAdventFn.mutate({
-      type: 'take',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.take,
-    });
+
     handleClose();
   };
 
@@ -82,11 +67,11 @@ function AddAdvent() {
           <CssBaseline />
           <Box sx={style}>
             <Typography component="h1" variant="h5">
-              Сумма прихода
+              Добавить расход
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Controller
-                name="kassa"
+                name="description"
                 control={control}
                 render={({ field }) => (
                   <TextField
@@ -94,8 +79,40 @@ function AddAdvent() {
                     size="small"
                     required
                     fullWidth
-                    id="kassa"
-                    label="Стол"
+                    id="description"
+                    label="Название"
+                    autoFocus
+                    {...field}
+                  />
+                )}
+              />
+              <Controller
+                name="comment"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    required
+                    fullWidth
+                    id="comment"
+                    label="Коментарии"
+                    autoFocus
+                    {...field}
+                  />
+                )}
+              />
+              <Controller
+                name="sum"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    margin="normal"
+                    size="small"
+                    required
+                    fullWidth
+                    id="sum"
+                    label="Сумма"
                     autoFocus
                     InputProps={{
                       inputComponent: NumericFormatCustom as any,
@@ -104,63 +121,6 @@ function AddAdvent() {
                   />
                 )}
               />
-              <Controller
-                name="take"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    required
-                    fullWidth
-                    id="take"
-                    label="С собой"
-                    autoFocus
-                    InputProps={{
-                      inputComponent: NumericFormatCustom as any,
-                    }}
-                    {...field}
-                  />
-                )}
-              />
-              <Controller
-                name="dostavka"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    margin="normal"
-                    size="small"
-                    required
-                    fullWidth
-                    id="dostavka"
-                    label="Доставка"
-                    autoFocus
-                    InputProps={{
-                      inputComponent: NumericFormatCustom as any,
-                    }}
-                    {...field}
-                  />
-                )}
-              />
-              <Controller
-                name="bot"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    label="Бот"
-                    id="bot"
-                    required
-                    InputProps={{
-                      inputComponent: NumericFormatCustom as any,
-                    }}
-                    margin="normal"
-                    size="small"
-                    fullWidth
-                    {...field}
-                  />
-                )}
-              />
-
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   slotProps={{ textField: { size: 'small', fullWidth: true } }}
@@ -180,4 +140,4 @@ function AddAdvent() {
   );
 }
 
-export default AddAdvent;
+export default AddExpense;

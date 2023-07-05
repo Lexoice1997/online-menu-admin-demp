@@ -13,14 +13,10 @@ export function getProductsHistory({
   endDate,
 }: IGetProductParams) {
   if (search) {
-    return $authHost.get(
-      `/stats?type="chiqim"&limit=${limit}&offset=${offset}&search=${search}&startDate=${startDate}&endDate=${endDate}`
-    );
+    return $authHost.get(`/stats?type="chiqim"&limit=${limit}&offset=${offset}&search=${search}`);
   }
 
-  return $authHost.get(
-    `/stats?limit=${limit}&offset=${offset}&startDate=${startDate}&endDate=${endDate}`
-  );
+  return $authHost.get(`/stats?limit=${limit}&offset=${offset}`);
 }
 
 export function getProductsByCategoryId(id: string) {

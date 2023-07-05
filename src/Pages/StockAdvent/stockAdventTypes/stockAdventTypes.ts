@@ -22,8 +22,8 @@ export interface IProduct {
 }
 
 export interface IGetProductParams {
-  startDate?: string | null;
-  endDate?: string | null;
+  startDate: string;
+  endDate: string;
   search?: string;
   limit?: number;
   offset?: number;

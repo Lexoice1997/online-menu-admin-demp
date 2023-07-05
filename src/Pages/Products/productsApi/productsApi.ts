@@ -7,14 +7,10 @@ export function getCategories() {
 
 export function getProducts({ search, limit, offset, categoryId }: IGetProductParams) {
   if (search) {
-    return $authHost.get(
-      `/product/products?limit=${limit}&offset=${offset}&search=${search}&category_id=${categoryId}`
-    );
+    return $authHost.get(`/product/products?limit=${limit}&offset=${offset}&search=${search}`);
   }
 
-  return $authHost.get(
-    `/product/products?limit=${limit}&offset=${offset}&category_id=${categoryId}`
-  );
+  return $authHost.get(`/product/products?limit=${limit}&offset=${offset}`);
 }
 
 export function getProductsByCategoryId(id: string) {

@@ -16,8 +16,8 @@ function StockAdvent() {
   const [products, setProducts] = useState<IProducts[] | undefined>(undefined);
   const [page, setPage] = useState(1);
   const [searchValue, setSearchValue] = useState<string>('');
-  const [startDate, setStartDate] = useState<string | undefined | null>(null);
-  const [endDate, setEndDate] = useState<string | undefined | null>(null);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
   const debouncedValue = useDebounce<string>(searchValue, 500);
   const { isLoading, data } = useGetProductsHistory({
     limit: 10,

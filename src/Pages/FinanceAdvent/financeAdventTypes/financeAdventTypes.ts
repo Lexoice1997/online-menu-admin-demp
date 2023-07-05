@@ -1,6 +1,6 @@
 export interface IAdventData {
   count: number;
-  advent: IAdvent[];
+  Finance_income: IAdvent[];
 }
 
 export interface IAdvent {

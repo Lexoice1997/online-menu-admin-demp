@@ -5,6 +5,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import NumericFormatCustom from '../../../../components/NumericFormatCustom/NumericFormatCustom';
+import { useAddEmployee } from '../../employeeListHooks/employeeListHooks';
 import { useAddFinanceAdvent } from '../../financeAdventHooks/financeAdventHooks';
 
 const style = {
@@ -20,47 +21,37 @@ const style = {
 };
 
 interface IFormInput {
-  bot: number;
-  take: number;
-  kassa: number;
-  dostavka: number;
-  date: string | Dayjs;
+  name: string;
+  surname: string;
+  position_id: string;
+  date: string;
+  birthday: string;
+  phone: string;
 }
 
-function AddAdvent() {
+function AddEmployee() {
   const [modal, setModal] = useState<boolean>(false);
   const [date, setDate] = useState<Dayjs | null>(dayjs(new Date()));
-  const { addFinanceAdventFn } = useAddFinanceAdvent();
+  const { addEmployeeFn } = useAddEmployee();
   const handleClose = () => setModal(false);
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      bot: 0,
-      take: 0,
-      kassa: 0,
-      dostavka: 0,
+      name: '',
+      surname: '',
+      phone: '',
+      position_id: '',
+      birthday: '',
       date: dayjs(new Date()),
     },
   });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    addFinanceAdventFn.mutate({
-      type: 'bot',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.bot,
-    });
-    addFinanceAdventFn.mutate({
-      type: 'dostavka',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.dostavka,
-    });
-    addFinanceAdventFn.mutate({
-      type: 'kassa',
-      date: dayjs(data.date).format('YYYY-MM-DD'),
-      sum: data.kassa,
-    });
-    addFinanceAdventFn.mutate({
-      type: 'take',
+    addEmployeeFn.mutate({
+      name: data.name,
+      surname: data.surname,
+      phone: data.phone,
+      position_id: '',
       date: dayjs(data.date).format('YYYY-MM-DD'),
       sum: data.take,
     });
@@ -180,4 +171,4 @@ function AddAdvent() {
   );
 }
 
-export default AddAdvent;
+export default AddEmployee;
